@@ -20,10 +20,11 @@ function make (prop) {
     var ease = opts.ease || inOutSine
     var duration = !isNaN(opts.duration) ? +opts.duration : 350
     var cancelled = false
+    var requestAnimationStep = opts.requestAnimationStep ? opts.requestAnimationStep : requestAnimationFrame
 
     return from === to ?
       cb(E_NOSCROLL, el[prop]) :
-      requestAnimationFrame(animate), cancel
+      requestAnimationStep(animate), cancel
 
     function cancel () {
       cancelled = true
@@ -39,8 +40,8 @@ function make (prop) {
       el[prop] = (eased * (to - from)) + from
 
       time < 1 ?
-        requestAnimationFrame(animate) :
-        requestAnimationFrame(function () {
+        requestAnimationStep(animate) :
+        requestAnimationStep(function () {
           cb(null, el[prop])
         })
     }
